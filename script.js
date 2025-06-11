@@ -1,57 +1,54 @@
-const board = document.getElementById("board");
-const message = document.getElementById("message");
-const resetBtn = document.getElementById("reset");
-
+let board = ["", "", "", "", "", "", "", "", ""];
 let currentPlayer = "X";
-let cells = Array(9).fill(null);
-let gameOver = false;
+let gameActive = true;
 
-function checkWinner() {
-  const winPatterns = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
-
-  for (const pattern of winPatterns) {
-    const [a, b, c] = pattern;
-    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-      return cells[a];
-    }
-  }
-  return cells.includes(null) ? null : "平手";
-}
-
-function handleClick(index) {
-  if (cells[index] || gameOver) return;
-  cells[index] = currentPlayer;
-  render();
-  const winner = checkWinner();
-  if (winner) {
-    gameOver = true;
-    message.textContent = winner === "平手" ? "平手！" : `${winner} 勝利！`;
-  } else {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-  }
-}
-
-function render() {
-  board.innerHTML = "";
-  cells.forEach((value, index) => {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.textContent = value || "";
-    cell.addEventListener("click", () => handleClick(index));
-    board.appendChild(cell);
+function renderBoard() {
+  const boardElement = document.getElementById("board");
+  boardElement.innerHTML = "";
+  board.forEach((cell, index) => {
+    const cellDiv = document.createElement("div");
+    cellDiv.classList.add("cell");
+    cellDiv.textContent = cell;
+    cellDiv.addEventListener("click", () => handleCellClick(index));
+    boardElement.appendChild(cellDiv);
   });
 }
 
-resetBtn.addEventListener("click", () => {
-  cells = Array(9).fill(null);
-  currentPlayer = "X";
-  gameOver = false;
-  message.textContent = "";
-  render();
-});
+function handleCellClick(index) {
+  if (!gameActive || board[index] !== "") return;
 
-render();
+  board[index] = currentPlayer;
+  renderBoard();
+  if (checkWinner()) {
+    document.getElementById("status").textContent = `🎉 玩家 ${currentPlayer} 獲勝！`;
+    gameActive = false;
+  } else if (board.every(cell => cell !== "")) {
+    document.getElementById("status").textContent = "🤝 平手！";
+    gameActive = false;
+  } else {
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    document.getElementById("status").textContent = `輪到玩家 ${currentPlayer}`;
+  }
+}
+
+function checkWinner() {
+  const wins = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+  return wins.some(([a,b,c]) => board[a] && board[a] === board[b] && board[a] === board[c]);
+}
+
+function restartGame() {
+  board = ["", "", "", "", "", "", "", "", ""];
+  currentPlayer = "X";
+  gameActive = true;
+  document.getElementById("status").textContent = "開始遊戲！輪到玩家 X";
+  renderBoard();
+}
+
+window.onload = () => {
+  renderBoard();
+  document.getElementById("status").textContent = "開始遊戲！輪到玩家 X";
+};

@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('https://i.postimg.cc/3wt1hp9r/Leonardo-Anime-XL-A-sunny-morning-outside-a-modern-high-school-3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  min-height: 100vh;
+  margin: 0;
+  color: #fff;
+  backdrop-filter: brightness(0.9);
+}
+
+.game {
+  margin: 50px auto;
+  width: 320px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #ffffffcc;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid #666;
+  color: #222;
+}
+
+.cell:hover {
+  background-color: #fffa;
+}
+
+#status {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
